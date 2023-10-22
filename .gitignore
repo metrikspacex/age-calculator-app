@@ -1,0 +1,40 @@
+# Builds
+*.local
+dist
+dist-ssr
+node_modules
+
+# Cache
+.eslintcache
+.stylelintcache
+vite
+
+# Logs
+*.log
+*.timestamp*.mjs
+lerna-debug.log*
+logs
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+cypress/coverage
+cypress/downloads
+cypress/reports
+cypress/screenshots
+cypress/videos
+vitest/coverage
+vitest/reports
+vitest/**/__snapshots__
+
+
+# Editor directories and files
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
