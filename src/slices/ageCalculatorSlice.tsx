@@ -2,14 +2,18 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import type { AgeCalculatorState } from "@src/types/AgeCalculator";
 import { computeAge } from "@src/utilities/computeAge";
+import { isNumericOrSpace } from "@src/utilities/isNumericOrSpace";
 import { isValid } from "@src/utilities/isValid";
 
 const initialState: AgeCalculatorState = {
   dayDisplay: null,
+  dayError: false,
   dayInput: null,
   monthDisplay: null,
+  monthError: false,
   monthInput: null,
   yearDisplay: null,
+  yearError: false,
   yearInput: null,
 };
 
@@ -23,57 +27,54 @@ export const ageCalculatorSlice = createSlice({
       {
         payload,
       }: PayloadAction<{
+        date: string;
         dateTime: string;
         maxLength: number;
-        value: string;
       }>
     ) => {
-      if (
-        isValid(payload.value, payload.dateTime) &&
-        payload.value.length <= payload.maxLength
-      ) {
-        switch (payload.dateTime) {
-          case "day":
-            state.dayInput = payload.value;
-            break;
-          case "month":
-            state.monthInput = payload.value;
-            break;
-          case "year":
-            state.yearInput = payload.value;
-            break;
-        }
-
-        const { dayInput, monthInput, yearInput } = state;
-        if (dayInput === "") {
-          state.dayInput = null;
-          state.dayDisplay = null;
-          state.monthDisplay = null;
-          state.yearDisplay = null;
-        } else if (monthInput === "") {
-          state.monthInput = null;
-          state.dayDisplay = null;
-          state.monthDisplay = null;
-          state.yearDisplay = null;
-        } else if (yearInput === "") {
-          state.yearInput = null;
-          state.dayDisplay = null;
-          state.monthDisplay = null;
-          state.yearDisplay = null;
-        } else if (
-          dayInput !== null &&
-          monthInput !== null &&
-          yearInput !== null
-        ) {
-          const { _days, _months, _years } = computeAge(
-            dayInput,
-            monthInput,
-            yearInput
+      switch (payload.dateTime) {
+        case "day":
+          state.dayError = !isValid(
+            payload.date,
+            payload.dateTime,
+            payload.maxLength
           );
-          state.dayDisplay = _days.toString();
-          state.monthDisplay = _months.toString();
-          state.yearDisplay = _years.toString();
-        }
+          if (isNumericOrSpace(payload.date)) state.dayInput = payload.date;
+          break;
+        case "month":
+          state.monthError = !isValid(
+            payload.date,
+            payload.dateTime,
+            payload.maxLength
+          );
+          if (isNumericOrSpace(payload.date)) state.monthInput = payload.date;
+          break;
+        case "year":
+          state.yearError = !isValid(
+            payload.date,
+            payload.dateTime,
+            payload.maxLength
+          );
+          if (isNumericOrSpace(payload.date)) state.yearInput = payload.date;
+          break;
+      }
+
+      if (
+        !state.dayError &&
+        state.dayInput !== null &&
+        !state.monthError &&
+        state.monthInput !== null &&
+        !state.yearError &&
+        state.yearInput !== null
+      ) {
+        const { _days, _months, _years } = computeAge(
+          state.dayInput,
+          state.monthInput,
+          state.yearInput
+        );
+        state.dayDisplay = _days;
+        state.monthDisplay = _months;
+        state.yearDisplay = _years;
       }
     },
   },

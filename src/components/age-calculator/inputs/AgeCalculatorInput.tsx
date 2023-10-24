@@ -31,12 +31,12 @@ export const AgeCalculatorInput = ({
   }, [dateTime, dayInput, monthInput, yearInput]);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
+    const date = event.target.value;
     dispatch(
       ageCalculatorActions.setAgeCalculator({
+        date,
         dateTime,
         maxLength,
-        value,
       })
     );
   };

@@ -395,6 +395,7 @@
     "unicorn/prefer-at": "error",
     "unicorn/prefer-dom-node-dataset": "error",
     "unicorn/prefer-event-target": "error",
+    "unicorn/prefer-includes": "off",
     "unicorn/prefer-number-properties": "error",
     "unicorn/prefer-query-selector": "off",
     "unicorn/prefer-spread": "off",

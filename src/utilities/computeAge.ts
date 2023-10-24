@@ -1,6 +1,23 @@
-export const computeAge = (day: string, month: string, year: string) => {
+import type {
+  AgeCalculatorDay,
+  AgeCalculatorMonth,
+  AgeCalculatorYear,
+} from "@src/types/AgeCalculator";
+
+export const computeAge = (
+  day: string,
+  month: string,
+  year: string
+): {
+  _days: AgeCalculatorDay;
+  _months: AgeCalculatorMonth;
+  _years: AgeCalculatorYear;
+} => {
   const today = new Date();
-  const birthDate = new Date(Number(year), Number(month), Number(day));
+  const birthDate = new Date();
+  birthDate.setUTCFullYear(Number(year));
+  birthDate.setUTCMonth(Number(month) - 1);
+  birthDate.setUTCDate(Number(day));
 
   const yearsLater = new Date(
     `${birthDate.getFullYear() + 1}/${
@@ -31,5 +48,9 @@ export const computeAge = (day: string, month: string, year: string) => {
   const _dateDays = _dateMonths % (Number(monthsLater) - Number(birthDate));
   const _days = Math.floor(_dateDays / (Number(daysLater) - Number(birthDate)));
 
-  return { _days, _months, _years };
+  return {
+    _days: _days.toString(),
+    _months: _months.toString(),
+    _years: _years.toString(),
+  };
 };
